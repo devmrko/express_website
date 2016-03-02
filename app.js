@@ -8,7 +8,7 @@ var cookieParser = require('cookie-parser');
 var nodemailer = require('nodemailer');
 //
 var session = require('express-session');
-var passport = require('express-session');
+var passport = require('passport');
 var expressValidator = require('express-validator');
 var LocalStrategy = require('passport-local').Strategy;
 //
@@ -32,8 +32,8 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-// multer configuration - handle file uploads
-app.use(multer({dest: './uploads'}))
+var upload = multer({ dest: './uploads' });
+app.use(upload);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -70,15 +70,15 @@ app.use(expressValidator({
     }
 }));
 
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
 // flash
 app.use(flash());
 app.use(function(req, res, next) {
    res.locals.messages = require('express-messages')(req, res);
    next(); 
 });
+
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/about', about);
@@ -115,6 +115,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;
