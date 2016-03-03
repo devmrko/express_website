@@ -16,9 +16,11 @@ var bodyParser = require('body-parser');
 var multer = require('multer');
 var flash = require('connect-flash');
 //
-var mongo = require('mongodb');
-var mongoose = require('mongoose');
-var db = mongoose.connection;
+// var mongo = require('mongodb');
+// var mongoose = require('mongoose');
+// var db = mongoose.connection;
+//var db =require('monk')('developer:hist@ds062898.mongolab.com:62898/azure');
+var db =require('monk')('jmbox.myqnapcloud.com:27018/master');
 
 // router js
 var routes = require('./routes/index');
@@ -27,6 +29,12 @@ var gridTest = require('./routes/gridTest');
 var contact = require('./routes/contact');
 
 var app = express();
+
+// Make our db accessible to our router
+app.use(function(req,res,next){
+    req.db = db;
+    next();
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

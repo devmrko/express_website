@@ -2,10 +2,40 @@ extends layout
 
 block content
     .container
-        h1 Grid Test
-        p 어쩌고 저쩌고 어쩌고 저쩌고 어쩌고 저쩌고 어쩌고 저쩌고  
-        ul
-            li 어쩌고 저쩌고 1
-            li 어쩌고 저쩌고 2
-            li 어쩌고 저쩌고 3
-        p 어쩌고 저쩌고 어쩌고 저쩌고 어쩌고 저쩌고 어쩌고 저쩌고
+        .row
+            .col-md-12
+                label 
+        .row
+            .col-md-12
+                .form-inline
+                    .form-group
+                        label Search words:&nbsp
+                        input.form-control(type='text', placeholder='Search words...')
+                        input.btn.btn-default(name='submit',type='button',value='Search')
+                        input.btn.btn-default(name='submit',type='button',value='Next')
+        if test_cols
+        .row
+            .col-md-12
+                .table-responsive
+                    table.table
+                        thead
+                            th #
+                            th Contents
+                            th Tags
+                        tbody
+                            if test_cols
+                            each test_col, i in test_cols
+                                tr
+                                    td #{i+1}
+                                    td #{test_col.contents}
+                                    td #{test_col.tags}
+        .row
+            .col-md-12
+                label Contents
+                input.form-control(type='text')
+            .col-md-12        
+                label Tags        
+                input.form-control(type='text')
+            .col-md-12
+                input.btn.btn-default(name='submit',type='button',value='New post')
+                input.btn.btn-default(name='submit',type='button',value='Save')                                    
