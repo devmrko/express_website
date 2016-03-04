@@ -7,6 +7,9 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(rel='stylesheet', href='/stylesheets/bootstrap.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
+    // jquery library has to locate above javascript declaration because the javascript refer it
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
+    
   body
     nav.navbar.navbar-default.navbar-fixed-top
             .container
@@ -33,5 +36,4 @@ html
     footer
         p &copy; 2016, All rights Reserved
 
-    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
     script(src='/javascripts/bootstrap.js')

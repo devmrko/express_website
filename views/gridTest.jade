@@ -1,41 +1,48 @@
 extends layout
 
 block content
+    link(rel='stylesheet', href='/stylesheets/jquery.tagsinput.css')
+    script(src='/javascripts/jquery.tagsinput.js')
     .container
         .row
             .col-md-12
                 label 
         .row
             .col-md-12
-                .form-inline
+                form.form-inline(method='post', action='/gridTest/search')
                     .form-group
                         label Search words:&nbsp
-                        input.form-control(type='text', placeholder='Search words...')
-                        input.btn.btn-default(name='submit',type='button',value='Search')
-                        input.btn.btn-default(name='submit',type='button',value='Next')
+                        input.form-control(name='id_searchText', type='text', placeholder='Search words...')
+                        input.btn.btn-default(name='submit',type='submit',value='Search')
+                        input.btn.btn-default(id='id_newPost', name='submit',type='button',value='New post')                       
         if test_cols
-        .row
-            .col-md-12
-                .table-responsive
-                    table.table
-                        thead
-                            th #
-                            th Contents
-                            th Tags
-                        tbody
-                            if test_cols
-                            each test_col, i in test_cols
-                                tr
-                                    td #{i+1}
-                                    td #{test_col.contents}
-                                    td #{test_col.tags}
-        .row
-            .col-md-12
-                label Contents
-                input.form-control(type='text')
-            .col-md-12        
-                label Tags        
-                input.form-control(type='text')
-            .col-md-12
-                input.btn.btn-default(name='submit',type='button',value='New post')
-                input.btn.btn-default(name='submit',type='button',value='Save')                                    
+            .row
+                .col-md-12
+                    .table-responsive
+                        table.table
+                            thead
+                                th #
+                                th Contents
+                                th Tags
+                            tbody
+                                each test_col, i in test_cols
+                                    tr(onclick='itemClick(\'#{i}\', \'#{test_col._id}\')', style="cursor:pointer")
+                                        td(id='col_index_#{i}') #{i+1}
+                                        td(id='col_contents_#{i}') #{test_col.contents}
+                                        td(id='col_tags_#{i}') 
+                                            span.badge #{test_col.tags}
+        form.form-inline(method='post', action='/gridTest/save')
+            .form-group
+                .row(id='id_editComp')
+                    .col-md-12
+                        label Contents
+                        input.form-control(id='id_sel_contents', name='sel_contents', type='text')
+                    .col-md-12        
+                        label Tags        
+                        input.form-control(id='id_sel_tags', name='sel_tags', type='text')
+                    .col-md-12
+                        input.btn.btn-default(name='submit',type='submit',value='Save')
+                        input.btn.btn-default(id='cancel', name='submit',type='button',value='Cancel')
+                        input.form-control(id='id_sel_id', name='sel_id', type='text', style='visibility: hidden')
+    
+    script(src='/javascripts/gridTest.js')

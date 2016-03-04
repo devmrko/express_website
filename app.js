@@ -19,14 +19,8 @@ var flash = require('connect-flash');
 // var mongo = require('mongodb');
 // var mongoose = require('mongoose');
 // var db = mongoose.connection;
-//var db =require('monk')('developer:hist@ds062898.mongolab.com:62898/azure');
+// var db =require('monk')('developer:hist@ds062898.mongolab.com:62898/azure');
 var db =require('monk')('jmbox.myqnapcloud.com:27018/master');
-
-// router js
-var routes = require('./routes/index');
-var about = require('./routes/about');
-var gridTest = require('./routes/gridTest');
-var contact = require('./routes/contact');
 
 var app = express();
 
@@ -55,6 +49,12 @@ app.use(session({
     saveUninitialized: true,
     resave: true
 }));
+
+// router js
+var routes = require('./routes/index');
+var about = require('./routes/about');
+var gridTest = require('./routes/gridTest');
+var contact = require('./routes/contact');
 
 // Passport
 app.use(passport.initialize());
