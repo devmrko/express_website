@@ -31,6 +31,11 @@ block content
                                         td(id='col_contents_#{i}') #{test_col.contents}
                                         td(id='col_tags_#{i}') 
                                             span.badge #{test_col.tags}
+        form.form-inline(method='post', action='/gridTest/next')
+            .form-group
+                .row
+                    .col-md-12
+                        input.btn.btn-default(name='next',type='submit',value='Next...')                                            
         form.form-inline(method='post', action='/gridTest/save')
             .form-group
                 .row(id='id_editComp')
@@ -44,5 +49,6 @@ block content
                         input.btn.btn-default(name='submit',type='submit',value='Save')
                         input.btn.btn-default(id='cancel', name='submit',type='button',value='Cancel')
                         input.form-control(id='id_sel_id', name='sel_id', type='text', style='visibility: hidden')
+                        input.form-control(id='id_page_no', name='page_no', type='text', style='visibility: hidden')
     
     script(src='/javascripts/gridTest.js')
