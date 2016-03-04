@@ -16,7 +16,7 @@ $("#cancel").click(function () {
 });
 
 function itemClick(index, id) {
-    if(editBool) {
+    if(editBool && id == $("#id_sel_id").val()) {
         editBool = false;
         visibleHandler(compArry, editBool);
     } else {
