@@ -16,15 +16,20 @@ $("#cancel").click(function () {
 });
 
 function itemClick(index, id) {
-    editBool = true;
-    visibleHandler(compArry, editBool);
+    if(editBool) {
+        editBool = false;
+        visibleHandler(compArry, editBool);
+    } else {
+        editBool = true;
+        visibleHandler(compArry, editBool);
 
-    var contents = $("#col_contents_" + index).text();
-    var tags = $("#col_tags_" + index).text();
+        var contents = $("#col_contents_" + index).text();
+        var tags = $("#col_tags_" + index).text();
 
-    $("#id_sel_contents").val(contents);
-    $("#id_sel_tags").val(tags);
-    $("#id_sel_id").val(id);    
+        $("#id_sel_contents").val(contents);
+        $("#id_sel_tags").val(tags);
+        $("#id_sel_id").val(id);
+    }
 }
 
 function visibleHandler(compArry, bool) {
