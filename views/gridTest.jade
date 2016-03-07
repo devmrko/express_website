@@ -12,7 +12,7 @@ block content
                 form.form-inline(method='post', action='/gridTest/search')
                     .form-group
                         label Search words:&nbsp
-                        input.form-control(id='id_searchText', name='id_searchText', type='text', placeholder='Search words...', value='#{searchText}')
+                        input.form-control(name='id_searchText', type='text', placeholder='Search words...')
                         input.btn.btn-default(name='submit',type='submit',value='Search')
                         input.btn.btn-default(id='id_newPost', name='submit',type='button',value='New post')                       
         if test_cols
@@ -35,8 +35,8 @@ block content
             .form-group
                 .row
                     .col-md-12
-                        input.btn.btn-default(id='next', name='next',type='button',value='Next...')                                            
-                        input(id='id_page_no', name='page_no', type='text', value='#{pageNo}')
+                        input.btn.btn-default(name='next',type='submit',value='Next...')                                            
+                        input(id='id_page_no', name='page_no', type='text', style='visibility: hidden', value='#{pageNo}')
         br
         form.form-inline(method='post', action='/gridTest/save')
             .form-group
