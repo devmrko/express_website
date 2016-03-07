@@ -8,106 +8,54 @@ router.get('/list', function (req, res, next) {
     res.send('for list test, you should put the \'/list\' more');
 });
 
-function getParam(req, paramNm) {
-    var url_parts = url.parse(req.url, true);
-    var query = url_parts.query;
-    var paramVal = eval('query.' + paramNm);
-    if (paramVal == undefined || paramVal == '') {
-        paramVal = 1;
-    }
-    return paramVal;
+var customRenderer = function (res, titleStr, dataObjNm, dataObj) {
+    return res.render('gridTest', {
+        "title": titleStr,
+        dataObjNm: dataObj
+    });
 }
 
 router.get('/', function (req, res, next) {
+
+    var url_parts = url.parse(req.url, true);
+    var query = url_parts.query;
+    var pageNo = query.pageNo;
+
+    if (pageNo == undefined || pageNo == '') {
+        pageNo = 0;
+    }
+
     var db = req.db;
     var test_cols = db.get('memo');
-    // var pageNo = getParam(req, 'PageNo');
-    var pageNo = 1;
-    var searchText = '';
 
-    doSearch(req, res, searchText, pageNo);
-});
-
-router.post('/', function (req, res, next) {
-
-    var pageNo = req.body['pageNo'] == undefined ? 1 : req.body['pageNo'];
-    var searchText = req.body['searchText'] == undefined ? '' : req.body['searchText'];
-    doJsonSearch(req, res, searchText, pageNo);
-    /*
-        var db = req.db;
-        var test_cols = db.get('memo');
-        test_cols.find({}, { skip: (pageNo - 1) * perPage, limit: perPage }, function (err, test_cols) {
-            return res.render('gridTest', {
-                "title": 'Grid Test',
-                'test_cols': test_cols,
-                'pageNo': pageNo
-            });
+    test_cols.find({}, { skip: pageNo * perPage, limit: perPage }, function (err, test_cols) {
+        // return customRenderer(res, 'Grid Test', 'test_cols', test_cols);
+        return res.render('gridTest', {
+            "title": 'Grid Test',
+            'test_cols': test_cols,
+            'pageNo': pageNo
         });
-    */
+        //.skip().limit(perPage);
+    });
+
 });
 
 router.get('/search', function (req, res, next) {
     res.send('search get request called');
 });
 
-function doSearch(req, res, searchText, pageNo) {
-    var db = req.db;
-    var test_cols = db.get('memo');
-
-    test_cols.find({ "contents": { "$regex": searchText } }, { skip: (pageNo - 1) * perPage, limit: perPage },
-        function (err, test_cols) {
-            res.render('gridTest', {
-                "title": 'Grid Test',
-                "test_cols": test_cols,
-                'pageNo': pageNo,
-                'searchText': searchText
-            });
-        });
-}
-
-function doJsonSearch(req, res, searchText, pageNo) {
-    var db = req.db;
-    var test_cols = db.get('memo');
-
-    test_cols.find({ "contents": { "$regex": searchText } }, { skip: (pageNo - 1) * perPage, limit: perPage },
-        function (err, test_cols) {
-            res.render('gridTest', {
-                "title": 'Grid Test',
-                "test_cols": test_cols,
-                'pageNo': pageNo,
-                'searchText': searchText
-            }, function(err, html) {
-                res.send(html);
-            });
-            
-            /*
-            res.jsonp({
-                "title": 'Grid Test',
-                "test_cols": test_cols,
-                'pageNo': pageNo,
-                'searchText': searchText
-            });
-            */            
-        });
-}
-
-/*
 router.post('/next', function (req, res, next) {
-    // var url = '/gridTest?pageNo=' + (req.body.page_no * 1 + 1);
-    // res.location(url);
-    // res.redirect(url);
-    var pageNo = (req.body.page_no * 1 + 1);
-    doPostSearch(req, res, searchText, pageNo);
+    var url = '/gridTest?pageNo=' + (req.body.page_no * 1 + 1);
+    res.location(url);
+    res.redirect(url);
 });
-*/
 
 router.post('/search', function (req, res, next) {
 
-    // var pageNo = req.body.page_no;
-    // if (pageNo == undefined || pageNo == '') {
-    //     pageNo = 1;
-    // }
-    var pageNo = 1;
+    var pageNo = req.body.page_no;
+    if (pageNo == undefined || pageNo == '') {
+        pageNo = 0;
+    }
     
     // get form values
     var searchText = req.body.id_searchText;
@@ -119,7 +67,18 @@ router.post('/search', function (req, res, next) {
     // if (errors) {
     //     // some error handling codes
     // } else {
-    doSearch(req, res, searchText, pageNo);
+    var db = req.db;
+    var test_cols = db.get('memo');
+
+    test_cols.find({ "contents": { "$regex": searchText } }, { skip: pageNo * perPage, limit: perPage },
+        function (err, test_cols) {
+            res.render('gridTest', {
+                "title": 'Grid Test',
+                "test_cols": test_cols,
+                'pageNo': pageNo
+            });
+        });
+    //.skip(pageNo * perPage).limit(perPage);;
     // }
 });
 
@@ -129,7 +88,14 @@ router.post('/save', function (req, res, next) {
     var selContents = req.body.sel_contents;
     var selTags = req.body.sel_tags;
     var selId = req.body.sel_id;
-
+    
+    // // foam validation
+    // req.checkBody('id_searchText', 'Search field is required').notEmpty();
+    // // Check Errors
+    // var errors = req.validationErrors();
+    // if (errors) {
+    //     // some error handling codes
+    // } else {
     var db = req.db;
     var test_cols = db.get('memo');
 
@@ -169,6 +135,8 @@ router.post('/save', function (req, res, next) {
             }
             );
     }
+    // }
 });
+
 
 module.exports = router;
