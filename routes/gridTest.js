@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var perPage = 2;
+var url = require('url');
 
 /* GET home page. */
 router.get('/list', function (req, res, next) {
@@ -16,7 +17,10 @@ var customRenderer = function (res, titleStr, dataObjNm, dataObj) {
 
 router.get('/', function (req, res, next) {
 
-    var pageNo = req.body.page_no;
+    var url_parts = url.parse(req.url, true);
+    var query = url_parts.query;
+    var pageNo = query.pageNo;
+
     if (pageNo == undefined || pageNo == '') {
         pageNo = 0;
     }
@@ -24,11 +28,12 @@ router.get('/', function (req, res, next) {
     var db = req.db;
     var test_cols = db.get('memo');
 
-    test_cols.find({}, {skip: pageNo * perPage, limit: perPage}, function (err, test_cols) {
+    test_cols.find({}, { skip: pageNo * perPage, limit: perPage }, function (err, test_cols) {
         // return customRenderer(res, 'Grid Test', 'test_cols', test_cols);
         return res.render('gridTest', {
             "title": 'Grid Test',
-            'test_cols': test_cols
+            'test_cols': test_cols,
+            'pageNo': pageNo
         });
         //.skip().limit(perPage);
     });
@@ -40,41 +45,42 @@ router.get('/search', function (req, res, next) {
 });
 
 router.post('/next', function (req, res, next) {
-    req.body.page_no = req.body.page_no + 1;
-    res.location('/gridTest');
-    res.redirect('/gridTest');
+    var url = '/gridTest?pageNo=' + (req.body.page_no * 1 + 1);
+    res.location(url);
+    res.redirect(url);
 });
 
 router.post('/search', function (req, res, next) {
-    
+
     var pageNo = req.body.page_no;
     if (pageNo == undefined || pageNo == '') {
         pageNo = 0;
     }
     
-        // get form values
-        var searchText = req.body.id_searchText;
+    // get form values
+    var searchText = req.body.id_searchText;
     
-        // // foam validation
-        // req.checkBody('id_searchText', 'Search field is required').notEmpty();
-        // // Check Errors
-        // var errors = req.validationErrors();
-        // if (errors) {
-        //     // some error handling codes
-        // } else {
-        var db = req.db;
-        var test_cols = db.get('memo');
+    // // foam validation
+    // req.checkBody('id_searchText', 'Search field is required').notEmpty();
+    // // Check Errors
+    // var errors = req.validationErrors();
+    // if (errors) {
+    //     // some error handling codes
+    // } else {
+    var db = req.db;
+    var test_cols = db.get('memo');
 
-        test_cols.find({ "contents": { "$regex": searchText } }, {skip: pageNo * perPage, limit: perPage}, 
-            function (err, test_cols) {
-                res.render('gridTest', {
-                    "title": 'Grid Test',
-                    "test_cols": test_cols
-                });
+    test_cols.find({ "contents": { "$regex": searchText } }, { skip: pageNo * perPage, limit: perPage },
+        function (err, test_cols) {
+            res.render('gridTest', {
+                "title": 'Grid Test',
+                "test_cols": test_cols,
+                'pageNo': pageNo
+            });
         });
-        //.skip(pageNo * perPage).limit(perPage);;
-        // }
-    });
+    //.skip(pageNo * perPage).limit(perPage);;
+    // }
+});
 
 
 router.post('/save', function (req, res, next) {

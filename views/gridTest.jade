@@ -36,6 +36,8 @@ block content
                 .row
                     .col-md-12
                         input.btn.btn-default(name='next',type='submit',value='Next...')                                            
+                        input(id='id_page_no', name='page_no', type='text', style='visibility: hidden', value='#{pageNo}')
+        br
         form.form-inline(method='post', action='/gridTest/save')
             .form-group
                 .row(id='id_editComp')
@@ -49,6 +51,5 @@ block content
                         input.btn.btn-default(name='submit',type='submit',value='Save')
                         input.btn.btn-default(id='cancel', name='submit',type='button',value='Cancel')
                         input.form-control(id='id_sel_id', name='sel_id', type='text', style='visibility: hidden')
-                        input.form-control(id='id_page_no', name='page_no', type='text', style='visibility: hidden')
     
     script(src='/javascripts/gridTest.js')
