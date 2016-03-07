@@ -56,7 +56,7 @@ function doSearch(req, res, searchText, pageNo) {
 
     test_cols.find({ "contents": { "$regex": searchText } }, { skip: (pageNo - 1) * perPage, limit: perPage },
         function (err, test_cols) {
-            res.render('gridTest', {
+            res.render('gridTestWithAngular', {
                 "title": 'Grid Test',
                 "test_cols": test_cols,
                 'pageNo': pageNo,
@@ -71,7 +71,7 @@ function doJsonSearch(req, res, searchText, pageNo) {
 
     test_cols.find({ "contents": { "$regex": searchText } }, { skip: (pageNo - 1) * perPage, limit: perPage },
         function (err, test_cols) {
-            res.render('gridTest', {
+            res.render('gridTestWithAngular', {
                 "title": 'Grid Test',
                 "test_cols": test_cols,
                 'pageNo': pageNo,

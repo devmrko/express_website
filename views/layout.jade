@@ -21,6 +21,7 @@ html
                         span.icon-bar
                         span.icon-bar
                         span.icon-bar
+                        span.icon-bar
                     a.navbar-brand(href='#') Express Website
                 #navbar.collapse.navbar-collapse
                     ul.nav.navbar-nav.navbar-right
@@ -30,6 +31,8 @@ html
                             a(href='/about') About Us
                         li(class=(title === 'Grid Test' ? 'active' : ''))
                             a(href='/gridTest') Grid Test
+                        li(class=(title === 'Grid Test' ? 'active' : ''))
+                            a(href='/gridTestWithAngular') Grid Test with AngularJS
                         li(class=(title === 'Contact' ? 'active' : ''))
                             a(href='/contact') Contact
     block content

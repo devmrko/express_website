@@ -10,13 +10,50 @@ $("#id_newPost").click(function () {
     $("#id_sel_id").val('');
 });
 
+function addDataObj(jQuery, dataObj, keyNm, keyVal) {
+    eval("jQuery.extend(dataObj, {" + keyNm + " : keyVal})");
+}
+
+$("#next").click(function () {
+
+    var ctrUrl = '/gridTest';
+    var paramDataObj = {};
+    var dataObj = {};
+    // addDataObj(jQuery, paramDataObj, "pageNo", ($("#id_page_no").val() * 1 + 1));
+    // addDataObj(jQuery, dataObj, "paramDataObj", paramDataObj);
+    addDataObj(jQuery, dataObj, "pageNo", ($("#id_page_no").val() * 1 + 1));
+    addDataObj(jQuery, dataObj, "searchText", $("#id_searchText").val());
+    /*
+        $.post(ctrUrl, dataObj).success(function (result) {
+            console.dir('success!!!');
+        }).error(function (jqXHR, textStatus, errorThrown) {
+            alert('error: ' + textStatus);
+        });
+    */
+    var jqxhr = $.post(
+        ctrUrl,
+        dataObj,
+        'json'
+        )
+        .done(function (data) {
+            console.log("second success");
+            $("#id_page_no").val($("#id_page_no").val() * 1 + 1);
+        })
+        .fail(function () {
+            console.log("error");
+        })
+        .always(function () {
+            console.log("finished");
+        });
+});
+
 $("#cancel").click(function () {
     editBool = false;
     visibleHandler(compArry, editBool);
 });
 
 function itemClick(index, id) {
-    if(editBool && id == $("#id_sel_id").val()) {
+    if (editBool && id == $("#id_sel_id").val()) {
         editBool = false;
         visibleHandler(compArry, editBool);
     } else {
