@@ -36,6 +36,7 @@ obj_NgApp.controller('ctr_gridTest', function ($scope, $http, $document, $window
     }
 
     $scope.nextClick = function () {
+        $scope.cancleClick();
         if ($scope.test_cols.length == 0) {
             alert('There is no more page.')
         } else {
