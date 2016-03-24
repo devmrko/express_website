@@ -16,22 +16,34 @@ block content
                         input.form-control(id='id_searchText', name='id_searchText',
                             ng-keyup="$event.keyCode == 13 ? searchClick() : null", 
                             type='text', placeholder='Search words...', ng-model='searchText')
+                        .checkbox
+                            label
+                                input(type="checkbox", ng-model="completeBool") 
+                                |&nbsp;exclude complete post&nbsp;
                         input.btn.btn-default(type='button', value='Search', ng-click='searchClick()')
                         input.btn.btn-default(type='button',value='New post', ng-click='newPostClick()')                       
+        br
+        .row
+            .col-md-12
+                span.badge(style="cursor:pointer", ng-click='searchClick("All")') All
+                span.badge(style="cursor:pointer", ng-repeat="item in keywords", ng-click="searchClick(item)") {{item}}
+        br
         .row
             .col-md-12
                 .table-responsive
-                    table.table
+                    table.table.mytable
                         thead
                             th #
                             th Contents
                             th Tags
+                            th Edit date
                         tbody
                             tr(ng-repeat="item in test_cols", style="cursor:pointer", ng-click='rowClick($index)')
                                 td(id='col_index_{{$index}}') {{$index + 1}}
                                 td(id='col_contents_{{$index}}') {{item.contents}}
                                 td(id='col_tags_{{$index}}') 
                                     span.badge {{item.tags}}
+                                td(id='col_date_{{$index}}') {{item.edit_date}}
         form.form-inline(method='post', action='/gridTestWithAngular/next')
             .form-group
                 .row
@@ -42,13 +54,15 @@ block content
             .form-group
                 .row(id='id_editComp')
                     .col-md-12
-                        label Contents
-                        input.form-control(id='id_sel_contents', name='sel_contents', type='text', ng-model='sel_contents')
+                        label Contents: &nbsp
+                        textarea.form-control(rows="5", id='id_sel_contents', name='sel_contents', ng-model='sel_contents', style="width: 100%")
                     .col-md-12        
-                        label Tags        
-                        input.form-control(id='id_sel_tags', name='sel_tags', type='text', ng-model='sel_tags')
+                        label Tags: &nbsp 
+                        input.form-control(id='id_sel_tags', name='sel_tags', type='text', ng-model='sel_tags', style="width: 100%")
                     .col-md-12
                         input.btn.btn-default(name='submit',type='submit',value='Save')
+                        input.btn.btn-default(type='button',value='Complete', ng-click='completeClick()', ng-show='completeButtonBool')
+                        input.btn.btn-default(type='button',value='Cancel Completion', ng-click='cancelCompletionClick()', ng-hide='completeButtonBool')
                         input.btn.btn-default(type='button',value='Cancel', ng-click='cancleClick()')
                         input.form-control(name='sel_id', type='text', ng-model='sel_id', ng-hide='true')
     
